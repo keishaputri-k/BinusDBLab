@@ -113,7 +113,7 @@ CHECK (DrinkPrice between 15000 AND 60000)
 
 ALTER Table TransactionHeader
 ADD Constraint Tn_Quantity
-CHECK (TransactionDrinkQuantity > 0 )
+CHECK (TransactionDrinkQuantity>0)
 
 
 ALTER TABLE Drink
@@ -128,11 +128,11 @@ ADD CONSTRAINT DN_TypeName CHECK (LEN(LTRIM(RTRIM(DrinkTypeName))) > 0)
 INSERT INTO DrinkType VALUES 
 	('DT001', 'Tea'),
    	('DT002', 'Coffee'),
-    	('DT003', 'Milkshake'),
-    	('DT004', 'Soda'),
-    	('DT005', 'Smoothie'),
-    	('DT006', 'Juice'),
-    	('DT007', 'Alcohol');
+    ('DT003', 'Milkshake'),
+    ('DT004', 'Soda'),
+    ('DT005', 'Smoothie'),
+    ('DT006', 'Juice'),
+    ('DT007', 'Alcohol');
 
 INSERT INTO City VALUES 
 	 ('CI001', 'Jakarta'),
@@ -144,7 +144,7 @@ INSERT INTO City VALUES
    	 ('CI007', 'Makassar'),
    	 ('CI008', 'Bogor'),
    	 ('CI009', 'Depok'),
-    	 ('CI010', 'Tangerang');
+     ('CI010', 'Tangerang');
 
 INSERT INTO Customer VALUES 
 	('CU001', 'CI001', 'John Doe', '1990-01-01', 'Male', 'Jalan Sudirman Terrace'),
@@ -153,10 +153,10 @@ INSERT INTO Customer VALUES
    	('CU004', 'CI004', 'Siti Nurhaliza', '1998-07-07', 'Female', 'Jalan Gatot Subroto No.21 Lane'),
    	('CU005', 'CI005', 'Michael Chen', '1975-03-03', 'Male', 'Jalan Gajah Mada Hill'),
    	('CU006', 'CI001', 'Bunga Citra Lestari', '1987-12-25', 'Female', 'Jalan Thamrin Road'),
-    	('CU007', 'CI002', 'Budi Santoso', '1992-09-09', 'Male', 'Jalan Pemuda Terrace'),
+    ('CU007', 'CI002', 'Budi Santoso', '1992-09-09', 'Male', 'Jalan Pemuda Terrace'),
    	('CU008', 'CI003', 'Megawati Soekarnoputri', '1949-01-23', 'Female', 'Jalan Bangka Avenue'),
-    	('CU009', 'CI005', 'Susilo Bambang Yudhoyono', '1949-09-09', 'Male', 'Jalan Raya Anyer Hill'),
-    	('CU010', 'CI004', 'Agus Salim', '1884-08-08', 'Male', 'Jalan KH Hasyim Asyari Avenue');
+    ('CU009', 'CI005', 'Susilo Bambang Yudhoyono', '1949-09-09', 'Male', 'Jalan Raya Anyer Hill'),
+    ('CU010', 'CI004', 'Agus Salim', '1884-08-08', 'Male', 'Jalan KH Hasyim Asyari Avenue');
 
 INSERT INTO Drink VALUES 
 	('DR001', 'DT001', 'Lipton Tea', '10', '20000'),
@@ -199,8 +199,8 @@ INSERT INTO MemberShip VALUES
 
 INSERT INTO TransactionHeader VALUES 
 	('TR001', 'CU001', 'ST001', '2024-01-11'),  
-    	('TR002', 'CU002', 'ST002', '2024-02-15'), 
-    	('TR003', 'CU004', 'ST004', '2024-03-04'), 
+    ('TR002', 'CU002', 'ST002', '2024-02-15'), 
+    ('TR003', 'CU004', 'ST004', '2024-03-04'), 
 	('TR004', 'CU006', 'ST006', '2024-06-07'),
 	('TR005', 'CU003', 'ST003', '2024-05-08'),
 	('TR006', 'CU002', 'ST002', '2024-12-30'),
@@ -226,8 +226,8 @@ INSERT INTO TransactionHeader VALUES
 
 INSERT INTO TransactionDetail VALUES 
 	('TR001', 'DR001', '8','2'),
-    	('TR002', 'DR002', '7', '1'),
-    	('TR003', 'DR004', '5','1' ),
+    ('TR002', 'DR002', '7', '1'),
+    ('TR003', 'DR004', '5','1' ),
 	('TR004', 'DR006', '4', '1'),
 	('TR005', 'DR003', '2', '3'),
 	('TR006', 'DR002', '1', '5'),
@@ -252,6 +252,88 @@ INSERT INTO TransactionDetail VALUES
 	('TR025', 'DR008', '3', '3');
 
 --SOAL
+--1
+SELECT 
+    ST.StaffName,
+    SUM(TD.TransactionDrinkQuantity) AS DrinkSold
+FROM 
+    Staff ST
+JOIN 
+    TransactionHeader1 TH ON TH.StaffID = ST.StaffID
+JOIN 
+    TransactionDetail1 TD ON TD.TransactionID = TH.TransactionID
+WHERE 
+    TH.TransactionDate > '2021-12-31' AND  DATEDIFF(YEAR, ST.StaffDOB, '2023-12-12') > 26
+GROUP BY 
+    ST.StaffName;
+
+--2
+SELECT
+	CONCAT('Mrs./Ms ', UPPER(StaffName)) AS StaffName,
+	COUNT(CU.CustomerID) AS TotalCustomers 
+FROM Staff S JOIN 
+	TransactionHeader1 TH ON TH.StaffID = S.StaffID JOIN 
+	Customer CU ON CU.CustomerID = TH.CustomerID JOIN 
+	City CI ON CI.CityID = CU.CityID
+WHERE StaffGender LIKE 'Female' and CityName LIKE '%Village'
+GROUP BY CONCAT('Mrs. ', UPPER(StaffName))
+ORDER BY COUNT(CU.CustomerID) DESC
+
+--3
+SELECT 
+    CustomerID,
+    CustomerName,
+    TotalTransaction,
+    (SELECT MAX(TotalTransaction) 
+     FROM (
+         SELECT 
+             SUM(D.DrinkPrice * TD.TransactionDrinkQuantity) AS TotalTransaction
+         FROM 
+             Customer CU
+         JOIN 
+             TransactionHeader1 TH ON TH.CustomerID = CU.CustomerID
+         JOIN 
+             TransactionDetail1 TD ON TD.TransactionID = TH.TransactionID
+         JOIN 
+             Drink D ON TD.DrinkID = D.DrinkID
+         WHERE 
+             CU.CustomerGender = 'Male' AND
+             TH.TransactionDate < '2022-01-01'
+         GROUP BY 
+             CU.CustomerID
+     ) AS Subquery) AS MaxTransaction
+FROM (
+    SELECT 
+        REPLACE(CU.CustomerID, 'CU', 'Customer ') AS CustomerID,
+        CONCAT('Mr. ', CU.CustomerName) AS CustomerName,
+        SUM(D.DrinkPrice * TD.TransactionDrinkQuantity) AS TotalTransaction
+    FROM 
+        Customer CU
+    JOIN 
+        TransactionHeader1 TH ON TH.CustomerID = CU.CustomerID
+    JOIN 
+        TransactionDetail1 TD ON TD.TransactionID = TH.TransactionID
+    JOIN 
+        Drink D ON TD.DrinkID = D.DrinkID
+    WHERE 
+        CU.CustomerGender = 'Male' AND
+        TH.TransactionDate < '2022-01-01'
+    GROUP BY 
+        REPLACE(CU.CustomerID, 'CU', 'Customer '), CONCAT('Mr. ', CU.CustomerName)
+) AS Transactions;
+
+-- 4
+SELECT UPPER(DrinkTypeName) AS DrinkTypeName,
+SUM(TransactionDrinkQuantity) AS TotalDrinksBought,
+CONCAT('Rp ', (AVG(DrinkPrice))) AS AveragePrice
+FROM DrinkType DT JOIN 
+Drink D ON D.DrinkTypeID = DT.DrinkTypeID JOIN 
+TransactionDetail1 TD ON TD.DrinkID = D.DrinkID JOIN 
+TransactionHeader1 TH ON TH.TransactionID = TD.TransactionID
+WHERE DrinkTypeName IN ('Alcohol', 'Cocktail')
+    AND DATENAME(weekday, TransactionDate) IN ('Monday', 'Wednesday', 'Friday')
+GROUP BY UPPER(DrinkTypeName)
+
 
 -- 5
 SELECT 
@@ -299,26 +381,6 @@ ORDER BY
     th.TransactionID;
 
 -- 7
-SELECT 
-    CONCAT(LEFT(d.DrinkName, 1), 
-           SUBSTRING_INDEX(SUBSTRING_INDEX(d.DrinkName, ' ', 2), ' ', -1), LEFT(dt.DrinkTypeName, 1)) AS DrinkCode,
-    D.DrinkName,
-    FORMAT(d.DrinkPrice * 0.9, 0, 'id_ID') AS DrinkDiscountedPrice,
-    FORMAT(SUM(d.DrinkPrice * 0.9 * td.TransactionDrinkQuantity), 0, 'id_ID') AS TotalProfit,
-    DT.DrinkTypeName
-FROM 
-    Drink d
-    JOIN DrinkType dt ON d.DrinkTypeID = dt.DrinkTypeID
-    JOIN TransactionDetail td ON d.DrinkID = td.DrinkID
-    JOIN TransactionHeader th ON td.TransactionID = th.TransactionID
-WHERE 
-    MONTH(TH.TransactionDate) > 6
-    AND D.DrinkName LIKE '%a%'
-GROUP BY 
-    D.DrinkID
-ORDER BY 
-    D.DrinkID;
-
 SELECT 
     subquery.DrinkCode,
     subquery.DrinkName,
@@ -377,3 +439,26 @@ FROM (
 ) AS subquery
 ORDER BY 
     subquery.TransactionID;
+
+--9
+CREATE VIEW TotalSalesDrinkType AS 
+SELECT DrinkTypeName,
+		CONCAT (SUM(TransactionDrinkSold) , ' Drinks') AS DrinksSold,
+		AVG(DrinkPrice) AS AverageDrinkPrice
+FROM DrinkType DT JOIN 
+Drink D ON D.DrinkTypeID = DT.DrinkTypeID JOIN 
+TransactionDetail1 TD ON TD.DrinkID = D.DrinkID JOIN 
+TransactionHeader1 TH ON TH.TransactionID = TD.TransactionID 
+WHERE DrinkTypeName IN ('Boba','Juice', 'Milkshake', 'Smoothie', 'Tea') AND  MONTH(TH.TransactionDate) > 6
+GROUP BY DrinkTypeName
+
+--10
+CREATE VIEW TotalCustomersBasedOnCity AS 
+SELECT CityName,COUNT(CU.CustomerID) AS TotalCustomer,
+		CONCAT (MIN(TransactionDrinkSold) , ' Drinks') AS MinAmountOfDrinksBought
+FROM City C JOIN 
+Customer CU ON CU.CityID = C.CityID JOIN 
+TransactionHeader1 TH ON TH.CustomerID = CU.CustomerID JOIN 
+TransactionDetail1 TD ON TD.TransactionID = TH.TransactionID 
+WHERE CityName LIKE '%Road'
+GROUP BY CityName
