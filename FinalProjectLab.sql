@@ -64,7 +64,7 @@ CREATE TABLE TransactionDetail (
 	TransactionDrinkQuantity INT NOT NULL,
 	PRIMARY KEY (TransactionID)
 
-ALTER TABLE 
+--ALTER TABLE 
 ALTER TABLE Customer
 ADD CONSTRAINT Cn_Name
 CHECK (LEN(CustomerName) >=3)
@@ -115,20 +115,24 @@ ALTER Table TransactionHeader
 ADD Constraint Tn_Quantity
 CHECK (TransactionDrinkQuantity > 0 )
 
+
 ALTER TABLE Drink
 ADD Constraint Dn_Name
 CHECK (CHARINDEX(' ', DrinkName) > 0)
 
---INSERT
+ALTER TABLE DrinkType
+ADD CONSTRAINT DN_TypeName CHECK (LEN(LTRIM(RTRIM(DrinkTypeName))) > 0)
 
+
+--INSERT VALUES 
 INSERT INTO DrinkType VALUES 
 	('DT001', 'Tea'),
    	('DT002', 'Coffee'),
-    ('DT003', 'Milkshake'),
-    ('DT004', 'Soda'),
-    ('DT005', 'Smoothie'),
-    ('DT006', 'Juice'),
-    ('DT007', 'Alcohol');
+    	('DT003', 'Milkshake'),
+    	('DT004', 'Soda'),
+    	('DT005', 'Smoothie'),
+    	('DT006', 'Juice'),
+    	('DT007', 'Alcohol');
 
 INSERT INTO City VALUES 
 	 ('CI001', 'Jakarta'),
@@ -156,14 +160,14 @@ INSERT INTO Customer VALUES
 
 INSERT INTO Drink VALUES 
 	('DR001', 'DT001', 'Lipton Tea', '10', '20000'),
-    ('DR002', 'DT002', 'Espresso Coffee', '10', '20000'),
+    ('DR002', 'DT002', 'Espresso', '10', '20000'),
     ('DR003', 'DT003', 'Chocolate Milkshake', '10', '20000'),
-    ('DR004', 'DT004', 'Coca-Cola Soda', '10', '20000'),
+    ('DR004', 'DT004', 'Coca-Cola', '10', '20000'),
     ('DR005', 'DT005', 'Mango Smoothie', '10', '20000'),
     ('DR006', 'DT006', 'Orange Juice', '10', '20000'),
     ('DR007', 'DT007', 'Red Wine', '10', '20000'),
 	('DR008', 'DT005', 'Strawberry Smoothie', '10', '22000'),
-    ('DR009', 'DT002', 'Latte Coffee', '10', '23000'),
+    ('DR009', 'DT002', 'Latte', '10', '23000'),
     ('DR010', 'DT001', 'Green Tea', '10', '19000');
 
 INSERT INTO Position VALUES 
@@ -222,8 +226,8 @@ INSERT INTO TransactionHeader VALUES
 
 INSERT INTO TransactionDetail VALUES 
 	('TR001', 'DR001', '8','2'),
-    ('TR002', 'DR002', '7', '1'),
-    ('TR003', 'DR004', '5','1' ),
+    	('TR002', 'DR002', '7', '1'),
+    	('TR003', 'DR004', '5','1' ),
 	('TR004', 'DR006', '4', '1'),
 	('TR005', 'DR003', '2', '3'),
 	('TR006', 'DR002', '1', '5'),
@@ -248,7 +252,6 @@ INSERT INTO TransactionDetail VALUES
 	('TR025', 'DR008', '3', '3');
 
 --SOAL
-
 
 -- 5
 SELECT 
