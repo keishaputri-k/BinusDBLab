@@ -63,6 +63,7 @@ CREATE TABLE TransactionDetail (
 	TransactionDrinkSold INT NOT NULL,
 	TransactionDrinkQuantity INT NOT NULL,
 	PRIMARY KEY (TransactionID)
+)
 
 --ALTER TABLE 
 ALTER TABLE Customer
@@ -135,16 +136,16 @@ INSERT INTO DrinkType VALUES
     ('DT007', 'Alcohol');
 
 INSERT INTO City VALUES 
-	 ('CI001', 'Jakarta'),
-   	 ('CI002', 'Surabaya'),
-   	 ('CI003', 'Bandung'),
-   	 ('CI004', 'Medan'),
-   	 ('CI005', 'Semarang'),
-   	 ('CI006', 'Palembang'),
-   	 ('CI007', 'Makassar'),
-   	 ('CI008', 'Bogor'),
-   	 ('CI009', 'Depok'),
-     ('CI010', 'Tangerang');
+	('CI001', 'Jakarta'),
+   	('CI002', 'Surabaya'),
+   	('CI003', 'Bandung'),
+   	('CI004', 'Medan'),
+   	('CI005', 'Semarang'),
+   	('CI006', 'Palembang'),
+   	('CI007', 'Makassar'),
+   	('CI008', 'Bogor'),
+   	('CI009', 'Depok'),
+    ('CI010', 'Tangerang');
 
 INSERT INTO Customer VALUES 
 	('CU001', 'CI001', 'John Doe', '1990-01-01', 'Male', 'Jalan Sudirman Terrace'),
@@ -187,15 +188,15 @@ INSERT INTO Staff VALUES
 
 INSERT INTO MemberShip VALUES 
 	('ME001', 'CU001', '2023-01-01', '2024-01-01'),
-    	('ME002', 'CU002', '2022-07-15', '2023-07-15'),
-    	('ME003', 'CU003', '2021-05-20', '2022-05-20'),
-    	('ME004', 'CU005', '2023-11-11', '2024-11-11'),  
-    	('ME005', 'CU004', '2022-04-04', '2023-04-04'),
-    	('ME006', 'CU001', '2020-09-09', '2021-09-09'),
-    	('ME007', 'CU009', '2023-03-03', '2024-03-03'),
-    	('ME008', 'CU007', '2022-02-02', '2023-02-02'),
-    	('ME009', 'CU008', '2021-01-01', '2022-01-01'),
-    	('ME010', 'CU006', '2020-12-12', '2021-12-12');  
+    ('ME002', 'CU002', '2022-07-15', '2023-07-15'),
+    ('ME003', 'CU003', '2021-05-20', '2022-05-20'),
+    ('ME004', 'CU005', '2023-11-11', '2024-11-11'),  
+    ('ME005', 'CU004', '2022-04-04', '2023-04-04'),
+    ('ME006', 'CU001', '2020-09-09', '2021-09-09'),
+    ('ME007', 'CU009', '2023-03-03', '2024-03-03'),
+    ('ME008', 'CU007', '2022-02-02', '2023-02-02'),
+    ('ME009', 'CU008', '2021-01-01', '2022-01-01'),
+    ('ME010', 'CU006', '2020-12-12', '2021-12-12');  
 
 INSERT INTO TransactionHeader VALUES 
 	('TR001', 'CU001', 'ST001', '2024-01-11'),  
@@ -328,8 +329,8 @@ SUM(TransactionDrinkQuantity) AS TotalDrinksBought,
 CONCAT('Rp ', (AVG(DrinkPrice))) AS AveragePrice
 FROM DrinkType DT JOIN 
 Drink D ON D.DrinkTypeID = DT.DrinkTypeID JOIN 
-TransactionDetail1 TD ON TD.DrinkID = D.DrinkID JOIN 
-TransactionHeader1 TH ON TH.TransactionID = TD.TransactionID
+TransactionDetail TD ON TD.DrinkID = D.DrinkID JOIN 
+TransactionHeader TH ON TH.TransactionID = TD.TransactionID
 WHERE DrinkTypeName IN ('Alcohol', 'Cocktail')
     AND DATENAME(weekday, TransactionDate) IN ('Monday', 'Wednesday', 'Friday')
 GROUP BY UPPER(DrinkTypeName)
@@ -462,3 +463,14 @@ TransactionHeader1 TH ON TH.CustomerID = CU.CustomerID JOIN
 TransactionDetail1 TD ON TD.TransactionID = TH.TransactionID 
 WHERE CityName LIKE '%Road'
 GROUP BY CityName
+
+--Transaction Simulation
+INSERT INTO TransactionDetail1 VALUES 
+    ('TR026', 'DR009', '8','2'),
+    ('TR027', 'DR002', '3','2'),
+    ('TR028', 'DR007', '5','1')
+
+INSERT INTO TransactionHeader1 VALUES 
+    ('TR029', 'CU002', 'ST010', '2024-06-08'),
+    ('TR027', 'CU008', 'ST002', '2024-06-03'), 
+    ('TR028', 'CU009', 'ST004', '2024-05-24')
