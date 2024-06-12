@@ -474,3 +474,11 @@ INSERT INTO TransactionHeader1 VALUES
     ('TR029', 'CU002', 'ST010', '2024-06-08'),
     ('TR027', 'CU008', 'ST002', '2024-06-03'), 
     ('TR028', 'CU009', 'ST004', '2024-05-24')
+
+UPDATE Drink d
+INNER JOIN TransactionDetail td ON d.DrinkID = td.DrinkID
+SET d.DrinkQuantity = d.DrinkQuantity - td.SoldQuantity
+WHERE td.TransactionID IN (
+  SELECT TransactionID
+  FROM TransactionHeader th
+);
