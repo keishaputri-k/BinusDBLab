@@ -53,7 +53,6 @@ CREATE TABLE TransactionHeader (
 	TransactionID CHAR(5) PRIMARY KEY CHECK (TransactionID LIKE 'TR[0-9][0-9][0-9]'),
 	CustomerID CHAR (5) FOREIGN KEY REFERENCES Customer (CustomerID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
 	StaffID CHAR (5) FOREIGN KEY REFERENCES Staff (StaffID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-	DrinkID CHAR (5) FOREIGN KEY REFERENCES Drink (DrinkID) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
 	TransactionDate DATE NOT NULL
 )
 
@@ -112,7 +111,7 @@ ALTER TABLE Drink
 ADD Constraint Dn_Price
 CHECK (DrinkPrice between 15000 AND 60000)
 
-ALTER Table TransactionHeader
+ALTER Table TransactionDetail
 ADD Constraint Tn_Quantity
 CHECK (TransactionDrinkQuantity>0)
 

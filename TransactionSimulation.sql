@@ -1,8 +1,8 @@
 --Transaction Simulation
 INSERT INTO TransactionDetail1 VALUES 
-    ('TR026', 'DR009', '8','2'),
-    ('TR027', 'DR002', '3','2'),
-    ('TR028', 'DR007', '5','1')
+    ('TR027', 'DR009', '8','2'),
+    ('TR028', 'DR002', '3','2'),
+    ('TR029', 'DR007', '5','1')
 
 INSERT INTO TransactionHeader1 VALUES 
     ('TR029', 'CU002', 'ST010', '2024-06-08'),

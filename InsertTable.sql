@@ -34,14 +34,14 @@ INSERT INTO Customer VALUES
 
 INSERT INTO Drink VALUES 
 	('DR001', 'DT001', 'Lipton Tea', '10', '20000'),
-    ('DR002', 'DT002', 'Espresso', '10', '20000'),
+    ('DR002', 'DT002', 'Espresso Coffee', '10', '20000'),
     ('DR003', 'DT003', 'Chocolate Milkshake', '10', '20000'),
-    ('DR004', 'DT004', 'Coca-Cola', '10', '20000'),
+    ('DR004', 'DT004', 'Coca-Cola Soda', '10', '20000'),
     ('DR005', 'DT005', 'Mango Smoothie', '10', '20000'),
     ('DR006', 'DT006', 'Orange Juice', '10', '20000'),
     ('DR007', 'DT007', 'Red Wine', '10', '20000'),
 	('DR008', 'DT005', 'Strawberry Smoothie', '10', '22000'),
-    ('DR009', 'DT002', 'Latte', '10', '23000'),
+    ('DR009', 'DT002', 'Coffee Latte', '10', '23000'),
     ('DR010', 'DT001', 'Green Tea', '10', '19000');
 
 INSERT INTO Position VALUES 
