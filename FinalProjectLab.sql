@@ -475,10 +475,11 @@ INSERT INTO TransactionHeader1 VALUES
     ('TR027', 'CU008', 'ST002', '2024-06-03'), 
     ('TR028', 'CU009', 'ST004', '2024-05-24')
 
-UPDATE Drink d
-INNER JOIN TransactionDetail td ON d.DrinkID = td.DrinkID
-SET d.DrinkQuantity = d.DrinkQuantity - td.TransactionDrinkQuantity
-WHERE td.TransactionID IN (
-  SELECT TransactionID
-  FROM TransactionHeader th
+UPDATE Drink 
+SET Drink.DrinkQuantity = Drink.DrinkQuantity - td.TransactionDrinkQuantity
+FROM Drink
+INNER JOIN TransactionDetail1 AS td ON Drink.DrinkID = td.DrinkID
+INNER JOIN TransactionHeader1 AS th ON td.TransactionID = th.TransactionID
+WHERE th.TransactionID IN (
+  'TR026', 'TR027', 'TR028'
 );
