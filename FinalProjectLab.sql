@@ -477,7 +477,7 @@ INSERT INTO TransactionHeader1 VALUES
 
 UPDATE Drink d
 INNER JOIN TransactionDetail td ON d.DrinkID = td.DrinkID
-SET d.DrinkQuantity = d.DrinkQuantity - td.SoldQuantity
+SET d.DrinkQuantity = d.DrinkQuantity - td.TransactionDrinkQuantity
 WHERE td.TransactionID IN (
   SELECT TransactionID
   FROM TransactionHeader th
